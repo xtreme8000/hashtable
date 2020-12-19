@@ -390,7 +390,7 @@ bool _ht_should_grow(HashTable* table) {
 
 bool _ht_should_shrink(HashTable* table) {
 	assert(table->size <= table->capacity);
-	return table->size == table->capacity * HT_SHRINK_THRESHOLD;
+	return table->size <= table->capacity / HT_SHRINK_THRESHOLD;
 }
 
 HTNode*
