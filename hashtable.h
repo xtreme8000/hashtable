@@ -83,6 +83,11 @@ bool ht_is_initialized(HashTable* table);
 
 int ht_reserve(HashTable* table, size_t minimum_capacity);
 
+bool ht_iterate_remove(HashTable* ht, void* user,
+					   bool (*callback)(void* key, void* value, void* user));
+bool ht_iterate(HashTable* ht, void* user,
+				bool (*callback)(void* key, void* value, void* user));
+
 /****************** PRIVATE ******************/
 
 void _ht_int_swap(size_t* first, size_t* second);

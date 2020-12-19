@@ -284,6 +284,60 @@ int ht_reserve(HashTable* table, size_t minimum_capacity) {
 	return HT_SUCCESS;
 }
 
+bool ht_iterate_remove(HashTable* ht, void* user,
+					   bool (*remove)(void* key, void* value, void* user)) {
+	assert(ht != NULL && remove != NULL);
+
+	bool removed = false;
+	for(size_t chain = 0; chain < ht->capacity; chain++) {
+		HTNode* node = ht->nodes[chain];
+		HTNode* prev = NULL;
+
+		while(node) {
+			if(remove(node->key, node->value, user)) {
+				if(prev) {
+					prev->next = node->next;
+				} else {
+					ht->nodes[chain] = node->next;
+				}
+
+				HTNode* del = node;
+				node = node->next;
+
+				_ht_destroy_node(del);
+
+				ht->size--;
+				removed = true;
+			} else {
+				prev = node;
+				node = node->next;
+			}
+		}
+	}
+
+	if(removed && _ht_should_shrink(ht))
+		_ht_adjust_capacity(ht);
+
+	return removed;
+}
+
+bool ht_iterate(HashTable* ht, void* user,
+				bool (*callback)(void* key, void* value, void* user)) {
+	assert(ht != NULL && callback != NULL);
+
+	for(size_t chain = 0; chain < ht->capacity; chain++) {
+		HTNode* node = ht->nodes[chain];
+
+		while(node) {
+			if(!callback(node->key, node->value, user))
+				return true;
+			node = node->next;
+		}
+	}
+
+	return false;
+}
+
 /****************** PRIVATE ******************/
 
 void _ht_int_swap(size_t* first, size_t* second) {
