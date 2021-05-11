@@ -28,6 +28,12 @@ target_link_libraries(hashtable-example hashtable)
 ## COMPILER FLAGS
 ###########################################################
 
-target_compile_options(hashtable PUBLIC -O3 -Os -ansi -g)
-target_compile_options(hashtable-test PUBLIC -ansi -g)
-target_compile_options(hashtable-example PUBLIC -ansi -g)
+set_target_properties(hashtable PROPERTIES C_STANDARD 99)
+set_target_properties(hashtable-static PROPERTIES C_STANDARD 99)
+set_target_properties(hashtable-test PROPERTIES C_STANDARD 99)
+set_target_properties(hashtable-example PROPERTIES C_STANDARD 99)
+
+target_compile_options(hashtable PUBLIC -O3)
+target_compile_options(hashtable-static PUBLIC -O3)
+target_compile_options(hashtable-test PUBLIC -g)
+target_compile_options(hashtable-example PUBLIC -g)
