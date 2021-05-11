@@ -12,11 +12,12 @@ project(hashtable)
 add_library(hashtable SHARED hashtable.c)
 add_library(hashtable-static STATIC hashtable.c)
 
+target_include_directories(hashtable PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hashtable-static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 ###########################################################
 ## EXECUTABLES
 ###########################################################
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(hashtable-test ${CMAKE_CURRENT_SOURCE_DIR}/test/test.c)
 add_executable(hashtable-example ${CMAKE_CURRENT_SOURCE_DIR}/test/example.c)
